@@ -1,0 +1,12 @@
+{
+  "name": "plugin-suite",
+  "path": "/home/dev/projects/plugin-suite",
+  "description": "Composable doctor/creator suite for Agent Plugins 1.0.0 targets: deterministic gates, predicted-delta plans, proven reversible transformations.",
+  "profile": "app",
+  "status": "active",
+  "stage": "discovery",
+  "summary": "Composable doctor/creator suite for Agent Plugins 1.0.0 targets: deterministic gates, predicted-delta plans, proven reversible transformations.",
+  "next_action": "Define the first concrete milestone",
+  "created": "2026-08-21",
+  "updated": "2026-08-21"
+}
