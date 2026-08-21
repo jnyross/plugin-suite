@@ -13,7 +13,18 @@ Stdlib-only Python 3. See `PLAN.md` for architecture, primitives, and phase ladd
 
 ## Install
 
-Add the repository as a marketplace entry or point your client at the directory — the root manifest makes it installable anywhere the Agent Plugins 1.0.0 contract is supported. Bundled skills:
+The repository is dual-packaged: root [`plugin.json`](plugin.json) is the portable Agent Plugins 1.0.0 manifest, and the Codex-native manifests (`.agents/plugins/marketplace.json` + `.codex-plugin/plugin.json`) make it a first-class Codex marketplace.
+
+Codex:
+
+```bash
+codex plugin marketplace add jnyross/plugin-suite --ref main
+codex plugin add plugin-suite@plugin-suite
+```
+
+Other Agent Plugins 1.0.0 clients: point them at the repository or directory; the root manifest is the portable contract.
+
+Bundled skills:
 
 - `plugin-doctor` — "look at this plugin/skill and tell me if it's good"; restructure recommendations; approved applies with rollback proof.
 - `plugin-creator` — "I have an idea" → grilling interview → tested spec → scaffolded plugin that passes every gate at birth.
