@@ -13,7 +13,7 @@ Stdlib-only Python 3. See `PLAN.md` for architecture, primitives, and phase ladd
 
 ## Releases and updates
 
-Every push to `main` cuts a release automatically: `scripts/release.py` bumps the version in both manifests from commits since the last tag (`feat`/`[minor]` -> minor, `BREAKING CHANGE` or `feat!`/`fix!` -> major, anything else -> patch; `[skip-release]` opts out), then the workflow tags `vX.Y.Z` and publishes a GitHub Release. Installed clients pick it up on marketplace refresh:
+Every push to `main` cuts a release automatically: `scripts/release.py` bumps the version in both manifests from commits since the last tag (`feat`/`[minor]` → minor, `BREAKING CHANGE` or `feat!`/`fix!` → major, anything else → patch), then the workflow tags `vX.Y.Z` and publishes a GitHub Release. Installed clients pick it up on marketplace refresh:
 
 ```bash
 codex plugin marketplace upgrade plugin-suite
@@ -23,8 +23,6 @@ codex plugin add plugin-suite@plugin-suite
 ## Install
 
 The repository is dual-packaged: root [`plugin.json`](plugin.json) is the portable Agent Plugins 1.0.0 manifest, and the Codex-native manifests (`.agents/plugins/marketplace.json` + `.codex-plugin/plugin.json`) make it a first-class Codex marketplace.
-
-Codex:
 
 ```bash
 codex plugin marketplace add jnyross/plugin-suite --ref main
