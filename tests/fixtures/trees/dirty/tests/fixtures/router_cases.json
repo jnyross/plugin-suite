@@ -1,0 +1,5 @@
+[
+  {"id": "explain-q", "request": "Explain the retry logic.", "route": "investigation", "mutation": "none"},
+  {"id": "implement-pos", "request": "Implement pagination.", "route": "change", "mutation": "scoped"},
+  {"id": "ambiguous", "request": "The settings feel wrong.", "route": "fallback", "mutation": "none"}
+]
