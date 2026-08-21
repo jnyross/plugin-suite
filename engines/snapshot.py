@@ -9,8 +9,20 @@ from contracts.profile import Profile
 from contracts.snapshot import Snapshot, build_snapshot, diff
 from contracts.tree import TreeModel
 from engines.gates import run_gates
+from engines.routing_contract import derive_contract
 from engines.profiler import infer_profile
 from engines.reader import read_tree
+
+
+def _route_count(model: TreeModel, profile: Profile) -> int:
+    """Number of route bullets in the entry skill's SKILL.md; 0 when not a router."""
+    entry = next((node for node in model.skills if node.name == profile.entry), None)
+    if entry is None:
+        return 0
+    try:
+        return len(derive_contract(entry.path).routes)
+    except SystemExit:
+        return 0
 
 
 def collect(root: Path) -> tuple[TreeModel, Profile, list[Finding], Snapshot]:
@@ -18,7 +30,9 @@ def collect(root: Path) -> tuple[TreeModel, Profile, list[Finding], Snapshot]:
     model = read_tree(root)
     profile = infer_profile(model)
     findings = run_gates(model, profile)
-    return model, profile, findings, build_snapshot(model, profile, findings)
+    return model, profile, findings, build_snapshot(
+        model, profile, findings, extra_metrics={"routes": _route_count(model, profile)}
+    )
 
 
 def save(snapshot: Snapshot, out_dir: Path, name: str | None = None) -> Path:

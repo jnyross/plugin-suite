@@ -26,9 +26,18 @@ class SnapshotEngineTest(unittest.TestCase):
     def test_collect_router_fixture(self):
         model, profile, findings, snapshot = collect(copy_tree())
         self.assertEqual("router-plugin", profile.kind)
+        self.assertEqual(3, snapshot.metrics["fixtures"])
+        self.assertEqual(2, snapshot.metrics["routes"])
         self.assertEqual([], findings)
         self.assertEqual(1, snapshot.metrics["skills"])
-        self.assertEqual(3, snapshot.metrics["fixtures"])
+
+    def test_routes_metric_zero_for_non_router(self):
+        bare = ROOT / "tests" / "fixtures" / "trees" / "bare_skill"
+        tmp = Path(tempfile.mkdtemp())
+        dest = tmp / "bare_skill"
+        shutil.copytree(bare, dest, ignore=shutil.ignore_patterns(".git", "__pycache__"))
+        *_, snapshot = collect(dest)
+        self.assertEqual(0, snapshot.metrics["routes"])
 
     def test_save_load_round_trip(self):
         *_, snapshot = collect(copy_tree())
