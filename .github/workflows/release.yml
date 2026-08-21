@@ -23,9 +23,10 @@ jobs:
           python-version: "3.x"
       - id: bump
         run: |
+          CURRENT=$(python3 -c "import json;print(json.load(open('plugin.json'))['version'])")
           VERSION=$(python3 scripts/release.py)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "current=$(python3 -c "import json;print(json.load(open('plugin.json'))['version'])")" >> "$GITHUB_OUTPUT"
+          echo "current=$CURRENT" >> "$GITHUB_OUTPUT"
       - name: cut release
         if: steps.bump.outputs.version != steps.bump.outputs.current
         env:
