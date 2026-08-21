@@ -1,6 +1,6 @@
 {
   "name": "plugin-suite",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Doctor and creator suite for Agent Plugins 1.0.0 targets: deterministic gates, predicted-delta plans, proven reversible transformations.",
   "author": {
     "name": "jnyross",
