@@ -1,0 +1,20 @@
+{
+  "name": "plugin-suite",
+  "interface": {
+    "displayName": "Plugin Suite"
+  },
+  "plugins": [
+    {
+      "name": "plugin-suite",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

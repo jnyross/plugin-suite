@@ -1,0 +1,26 @@
+{
+  "name": "plugin-suite",
+  "version": "0.1.0",
+  "description": "Doctor and creator suite for Agent Plugins 1.0.0 targets: deterministic gates, predicted-delta plans, proven reversible transformations.",
+  "author": {
+    "name": "jnyross",
+    "url": "https://github.com/jnyross"
+  },
+  "repository": "https://github.com/jnyross/plugin-suite",
+  "license": "MIT",
+  "keywords": [
+    "plugins",
+    "doctor",
+    "scaffolding",
+    "validation",
+    "developer-tools"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Plugin Suite",
+    "defaultPrompt": [
+      "Diagnose this plugin or skill directory and recommend improvements",
+      "Create a new plugin from my idea"
+    ]
+  }
+}

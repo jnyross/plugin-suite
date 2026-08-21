@@ -153,6 +153,21 @@ class LeakageGateTest(unittest.TestCase):
         found = leakage.run(model, PROFILE)
         self.assertEqual([("client-path", "error")], [(f.code, f.severity) for f in found])
 
+    def test_packaging_dir_with_manifest_is_warning(self):
+        model = make_tree(Path(self.tmp.name))
+        packaging = model.root / ".codex-plugin"
+        packaging.mkdir()
+        (packaging / "plugin.json").write_text('{"name": "x"}', encoding="utf-8")
+        found = leakage.run(model, PROFILE)
+        self.assertEqual([("client-path", "warning")], [(f.code, f.severity) for f in found])
+        self.assertIn("deliberate client packaging", found[0].evidence)
+
+    def test_packaging_dir_without_manifest_stays_error(self):
+        model = make_tree(Path(self.tmp.name))
+        (model.root / ".codex-plugin").mkdir()
+        found = leakage.run(model, PROFILE)
+        self.assertEqual([("client-path", "error")], [(f.code, f.severity) for f in found])
+
     def test_clean_tree_no_findings(self):
         self.assertEqual([], leakage.run(make_tree(Path(self.tmp.name)), PROFILE))
 
