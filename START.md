@@ -14,7 +14,7 @@ Composable doctor/creator suite for Agent Plugins 1.0.0 targets: deterministic g
 
 ## Next action
 
-Execute PLAN.md phase 1: contracts, reader, profiler, gate ports, parity test against Plugin-Template scripts.
+All six PLAN.md phases shipped and committed. Run `python3 cli.py doctor <target>` / `create` on real work; extend ops and rubrics from usage evidence.
 
 ## Decisions and constraints
 

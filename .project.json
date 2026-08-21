@@ -4,9 +4,9 @@
   "description": "Composable doctor/creator suite for Agent Plugins 1.0.0 targets: deterministic gates, predicted-delta plans, proven reversible transformations.",
   "profile": "app",
   "status": "active",
-  "stage": "discovery",
-  "summary": "Composable doctor/creator suite for Agent Plugins 1.0.0 targets: deterministic gates, predicted-delta plans, proven reversible transformations.",
-  "next_action": "Define the first concrete milestone",
+  "stage": "shipping",
+  "summary": "Working doctor/creator suite for Agent Plugins 1.0.0 targets: contracts, seven gates with parity vs Plugin-Template scripts, snapshots/diff CLI, extractor, advisory judge, transformer with predicted-delta rollback, five ops, interview-to-scaffold create path.",
+  "next_action": "Run doctor/create on real plugins; add adapter profiles only when concrete targets demand them.",
   "created": "2026-08-21",
   "updated": "2026-08-21"
 }
