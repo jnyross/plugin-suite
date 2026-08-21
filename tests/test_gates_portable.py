@@ -162,6 +162,13 @@ class LeakageGateTest(unittest.TestCase):
         self.assertEqual([("client-path", "warning")], [(f.code, f.severity) for f in found])
         self.assertIn("deliberate client packaging", found[0].evidence)
 
+    def test_version_mismatch_with_codex_manifest(self):
+        model = make_tree(Path(self.tmp.name))
+        (model.root / ".codex-plugin").mkdir()
+        (model.root / ".codex-plugin" / "plugin.json").write_text('{"name": "x", "version": "9.9.9"}', encoding="utf-8")
+        found = manifest.run(model, PROFILE)
+        self.assertIn(("version-mismatch", "error"), [(f.code, f.severity) for f in found])
+
     def test_packaging_dir_without_manifest_stays_error(self):
         model = make_tree(Path(self.tmp.name))
         (model.root / ".codex-plugin").mkdir()

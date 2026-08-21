@@ -1,5 +1,6 @@
 """Manifest and skill-frontmatter checks ported from the template validator."""
 
+import json
 import re
 
 from contracts.finding import Finding
@@ -33,6 +34,14 @@ def run(model, profile) -> list[Finding]:
     unknown = sorted(set(m) - ALLOWED_FIELDS)
     if unknown:
         findings.append(Finding("manifest-unknown", "error", "plugin.json", f"unsupported fields: {', '.join(unknown)}"))
+    codex_manifest = model.root / ".codex-plugin" / "plugin.json"
+    if codex_manifest.is_file():
+        try:
+            codex_version = json.loads(codex_manifest.read_text(encoding="utf-8")).get("version")
+        except (OSError, ValueError):
+            codex_version = None
+        if codex_version != m.get("version"):
+            findings.append(Finding("version-mismatch", "error", ".codex-plugin/plugin.json", f"packaging version {codex_version!r} must match root manifest version {m.get('version')!r}"))
 
     seen: dict[str, str] = {}
     for skill in model.skills:
