@@ -1,11 +1,12 @@
-"""Suite command-line interface: gates, diff, and doctor."""
+"""Suite command-line interface: gates, diff, doctor, and create."""
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 from contracts.finding import SEVERITIES
-from engines import doctor, snapshot
+from engines import doctor, interviewer, scaffolder, snapshot
 
 _RANK = {sev: rank for rank, sev in enumerate(SEVERITIES)}
 
@@ -54,6 +55,43 @@ def _doctor(args: argparse.Namespace) -> int:
         print(line)
     return 1 if any(f.severity == "error" and f.source != "judge" for f in findings) else 0
 
+def _create(args: argparse.Namespace) -> int:
+    state_dir = Path(args.state_dir)
+    answers: list[str] | None = None
+    if args.answers:
+        try:
+            raw = json.loads(Path(args.answers).read_text(encoding="utf-8"))
+        except (OSError, ValueError) as exc:
+            print(f"create: cannot read answers file {args.answers}: {exc}", file=sys.stderr)
+            return 1
+        if not isinstance(raw, list) or not all(isinstance(item, str) for item in raw):
+            print(f"create: {args.answers} must contain a JSON array of strings", file=sys.stderr)
+            return 1
+        answers = raw
+    try:
+        interview = interviewer.load(state_dir)
+    except (OSError, ValueError, KeyError):
+        interview = interviewer.Interview(answers=answers)
+    if answers is not None:
+        interview.answers = list(answers)
+    spec = interview.run()
+    state_path = interviewer.save(state_dir, interview)
+    try:
+        spec.validate()
+    except ValueError as exc:
+        print(f"create: interview incomplete ({exc}); state saved at {state_path}", file=sys.stderr)
+        return 1
+    dest = Path(args.dest) if args.dest else Path.cwd() / spec.name
+    try:
+        scaffolder.scaffold(spec, dest)
+    except ValueError as exc:
+        print(f"create: {exc}", file=sys.stderr)
+        return 1
+    _, _, _, snap = snapshot.collect(dest)
+    print(f"created: {dest}")
+    print(json.dumps(snap.metrics))
+    return 0
+
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="plugin-suite")
@@ -74,6 +112,12 @@ def main(argv: list[str] | None = None) -> int:
     doc.add_argument("--out", default=None, help="directory to save the JSON report into")
     doc.add_argument("--json", action="store_true", help="print the full report as JSON")
     doc.set_defaults(fn=_doctor)
+
+    create = sub.add_parser("create", help="interview for a Spec and scaffold a green plugin tree")
+    create.add_argument("--state-dir", default=".", help="directory holding .suite interview state")
+    create.add_argument("--dest", default=None, help="plugin destination directory (default ./<name>)")
+    create.add_argument("--answers", default=None, help="JSON file containing an array of answer strings")
+    create.set_defaults(fn=_create)
 
     args = parser.parse_args(argv)
     return args.fn(args)
