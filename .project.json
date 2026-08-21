@@ -5,8 +5,8 @@
   "profile": "app",
   "status": "active",
   "stage": "shipping",
-  "summary": "Working doctor/creator suite for Agent Plugins 1.0.0 targets: contracts, seven gates with parity vs Plugin-Template scripts, snapshots/diff CLI, extractor, advisory judge, transformer with predicted-delta rollback, five ops, interview-to-scaffold create path.",
-  "next_action": "Run doctor/create on real plugins; add adapter profiles only when concrete targets demand them.",
+  "summary": "Public, Codex-installable doctor/creator suite for Agent Plugins 1.0.0 targets: dual packaging (portable manifest + Codex marketplace), seven gates with template parity, extractor, advisory judge, transformer with predicted-delta rollback, five ops, interview-to-scaffold create path, managed omp skills wrapping the CLI.",
+  "next_action": "Use plugin-doctor/plugin-creator on real plugins; add adapter profiles only when concrete targets demand them.",
   "created": "2026-08-21",
   "updated": "2026-08-21"
 }
