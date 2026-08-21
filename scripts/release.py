@@ -5,14 +5,12 @@ Bump rules (first match wins), evaluated over commit subjects since the last tag
 - a subject containing BREAKING CHANGE or starting with feat!/fix!  -> major
 - a subject starting with feat or containing [minor]                -> minor
 - otherwise                                                         -> patch
-A subject containing [skip-release] suppresses the bump entirely (no-op).
-Prints the resulting version; prints the current version unchanged on no-op.
+Every non-empty range cuts a release. Prints the resulting version.
 """
 
 import json
 import re
 import subprocess
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -36,9 +34,7 @@ def commits_since_last_tag() -> list[str]:
     return [line for line in out.splitlines() if line.strip()]
 
 
-def bump_level(subjects: list[str]) -> str | None:
-    if any("[skip-release]" in subject for subject in subjects):
-        return None
+def bump_level(subjects: list[str]) -> str:
     if any("BREAKING CHANGE" in subject or re.match(r"^(feat|fix)!", subject) for subject in subjects):
         return "major"
     if any(subject.startswith("feat") or "[minor]" in subject for subject in subjects):
@@ -58,13 +54,12 @@ def bumped(version: str, level: str) -> str:
 
 
 def main() -> int:
-    version = current_version()
     subjects = commits_since_last_tag()
-    level = bump_level(subjects) if subjects else None
-    if level is None:
+    version = current_version()
+    if not subjects:
         print(version)
         return 0
-    new_version = bumped(version, level)
+    new_version = bumped(version, bump_level(subjects))
     for manifest in MANIFESTS:
         data = json.loads(manifest.read_text(encoding="utf-8"))
         data["version"] = new_version
