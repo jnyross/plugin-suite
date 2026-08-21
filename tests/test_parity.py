@@ -1,5 +1,6 @@
 """Integration parity: new pipeline reproduces old script behavior on Plugin-Template."""
 import json
+import os
 import shutil
 import sys
 import tempfile
@@ -7,7 +8,8 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-sys.path.insert(0, "/home/dev/projects/Plugin-Template/scripts")
+TEMPLATE = Path(os.environ.get("PLUGIN_SUITE_TEMPLATE", Path.home() / "projects" / "Plugin-Template"))
+sys.path.insert(0, str(TEMPLATE / "scripts"))
 
 import router_contract as old_rc
 import health_audit as old_audit
@@ -18,7 +20,6 @@ from engines.profiler import infer_profile
 from engines.gates import run_gates
 from engines.routing_contract import derive_contract
 
-TEMPLATE = Path("/home/dev/projects/Plugin-Template")
 
 
 def make_copy() -> Path:
@@ -40,6 +41,8 @@ def new_results(copy: Path):
 
 class TestParity(unittest.TestCase):
     def setUp(self):
+        if not TEMPLATE.exists():
+            self.skipTest("Plugin-Template not available")
         self.tmp = tempfile.TemporaryDirectory(prefix="parity-test-")
         self.addCleanup(self.tmp.cleanup)
 
